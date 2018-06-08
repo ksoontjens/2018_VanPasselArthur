@@ -6,6 +6,8 @@ package hellotvxlet;
 import javax.tv.xlet.*;
 import org.havi.ui.*;
 import org.dvb.ui.*;
+import java.util.*;
+import java.awt.*;
 import java.awt.event.*;
 import org.havi.ui.event.*;
 
@@ -77,7 +79,7 @@ public class HelloTVXlet implements Xlet, HActionListener {
         
         // acties koppelen aan knoppen
         knop1.setActionCommand("knop1_actioned");
-        knop2.setActionCommand("knop1_actioned");
+        knop2.setActionCommand("knop2_actioned");
         knop1.addHActionListener(this);
         knop2.addHActionListener(this);
     }
@@ -108,8 +110,8 @@ public class HelloTVXlet implements Xlet, HActionListener {
             throw new XletStateChangeException ( " Laat me leven ! " ) ;
         }
     }
-    
-    public void actionPerformed ( ActionEvent e ){
+
+    public void actionPerformed (ActionEvent e){
         System.out.println(e.getActionCommand());
     }
 }
