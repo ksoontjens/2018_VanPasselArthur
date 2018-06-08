@@ -1,0 +1,32 @@
+these stubs are the ones obtained from the recent publication:http://www.mhp.org/specs/tam685r12_javadoc_112.zip, but to the ones code4tv has added the following missing packages:
+
+
+- package org.dvb.dom.css  (4 files)
+- package org.dvb.dom.dvbhtml (17 files)
+- package org.dvb.dom.environment (3 files)
+- package org.dvb.dom.event (1 files)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
