@@ -6,7 +6,6 @@ package hellotvxlet;
 import javax.tv.xlet.*;
 import org.havi.ui.*;
 import org.dvb.ui.*;
-import java.awt.*;
 import java.awt.event.*;
 import org.havi.ui.event.*;
 
