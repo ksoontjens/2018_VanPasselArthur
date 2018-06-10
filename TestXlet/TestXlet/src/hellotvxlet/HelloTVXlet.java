@@ -5,7 +5,6 @@ package hellotvxlet;
 
 import javax.tv.xlet.*;
 import org.havi.ui.*;
-import org.dvb.ui.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -21,10 +20,12 @@ public class HelloTVXlet implements Xlet, HActionListener {
     // Componenten
     private HStaticText tekstLabel;
     private HTextButton buttons[] = new HTextButton[16];
+    private HTextButton submitButton;
    
     // Variabelen 
     private int cards[] = new int[16];
     private boolean firstTurn = true;
+    private boolean check = false;
     private int firstCard;
     private int secondCard;
     private boolean chosenCards[] = new boolean[16];
@@ -104,67 +105,102 @@ public class HelloTVXlet implements Xlet, HActionListener {
     }
     
     public void actionPerformed (ActionEvent e){
-            System.out.println("knop" + e.getActionCommand() + "_actioned");
-            int i = Integer.parseInt(e.getActionCommand());
+        System.out.println("knop" + e.getActionCommand() + "_actioned");
 
-            giveColor(i);
-            checkCard(i);
+        if (check) {
+            System.out.println("check de kaarten");
+            checkCards();
+        }
+        else {
+            int i = Integer.parseInt(e.getActionCommand());
+            if (chosenCards[i] == false) {
+                //System.out.println("knop" + e.getActionCommand() + " marcheert");
+                giveColor(i);
+            }
+            else {
+                System.out.println("knop" + e.getActionCommand() + " is al geactiveerd");
+            }
+        }
     }
     
     public void giveColor(int i) {
+        
         if (cards[i] == 1) {
             buttons[i].setBackground(Color.BLUE);
+            System.out.println("knop" + i + " is verandert van kleur");
         }
         
         if (cards[i] == 2) {
             buttons[i].setBackground(Color.RED);
+            System.out.println("knop" + i + " is verandert van kleur");
         }
         
         if (cards[i] == 3) {
             buttons[i].setBackground(Color.YELLOW);
+            System.out.println("knop" + i + " is verandert van kleur");
         }
         
         if (cards[i] == 4) {
             buttons[i].setBackground(Color.ORANGE);
+            System.out.println("knop" + i + " is verandert van kleur");
         }
         
         if (cards[i] == 5) {
             buttons[i].setBackground(Color.GREEN);
+            System.out.println("knop" + i + " is verandert van kleur");
         }
         
         if (cards[i] == 6) {
             buttons[i].setBackground(Color.WHITE);
+            System.out.println("knop" + i + " is verandert van kleur");
         }
         
         if (cards[i] == 7) {
             buttons[i].setBackground(Color.PINK);
+            System.out.println("knop" + i + " is verandert van kleur");
         }
         if (cards[i] == 8) {
             buttons[i].setBackground(Color.BLACK);
+            System.out.println("knop" + i + " is verandert van kleur");
         }
         chosenCards[i] = true;
-    }
-    
-    public void checkCard(int i) {
         if (firstTurn) {
-            buttons[secondCard].setBackground(Color.GRAY);
-            buttons[firstCard].setBackground(Color.GRAY);
             firstTurn = false;
             firstCard = i;
         }
         else {
             secondCard = i;
-            if (cards[secondCard] == cards[firstCard]) {
-                System.out.println("JUIST GERADEN!");
-                chosenCards[secondCard] = true;
-            }
-            else {
-                System.out.println("FOUT GERADEN!");
-                chosenCards[firstCard] = false;
-                chosenCards[secondCard] = false;
-            }
             firstTurn = true;
+            check = true;
+            submitButton.requestFocus();
         }
+    }
+    
+    public void checkCards() {
+        if (cards[secondCard] == cards[firstCard]) {
+            System.out.println("JUIST GERADEN!");
+        }
+        else {
+            System.out.println("FOUT GERADEN!");
+            chosenCards[firstCard] = false;
+            chosenCards[secondCard] = false;
+            try {
+                //wacht 2 seconden
+                Thread.sleep(1500);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+
+            // draai de kaarten terug om
+            buttons[secondCard].setBackground(Color.GRAY);
+            buttons[secondCard].setBackgroundMode(HVisible.BACKGROUND_FILL);
+            buttons[firstCard].setBackground(Color.GRAY);
+            buttons[firstCard].setBackgroundMode(HVisible.BACKGROUND_FILL);
+            buttons[firstCard].requestFocus();
+            buttons[secondCard].requestFocus();
+        }
+        check = false;
+        buttons[secondCard].requestFocus();
     }
     
     // Initialiseren van de benodigde resources en variabelen :
@@ -195,6 +231,19 @@ public class HelloTVXlet implements Xlet, HActionListener {
         // tekstLabel aan de Scene toevoegen
         scene.add(tekstLabel);
         
+        // Submit button toevegen
+        submitButton = new HTextButton("SUBMIT GUESS");
+        submitButton.setLocation(460,330);
+        submitButton.setSize(210,210);                        
+        submitButton.setBackground(Color.GRAY);
+        submitButton.setBackgroundMode(HVisible.BACKGROUND_FILL);  
+        
+        submitButton.setActionCommand("-voor-submitten");
+        submitButton.addHActionListener(this);
+        
+        scene.add(submitButton);
+        
+        
         // Knoppen installen
         setupKnoppen();
         setupCards();
@@ -208,6 +257,7 @@ public class HelloTVXlet implements Xlet, HActionListener {
         // Scene zichtbaar maken
         scene.validate();
         scene.setVisible(true);
+        
         
     }
     
