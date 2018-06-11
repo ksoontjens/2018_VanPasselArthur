@@ -21,7 +21,8 @@ public class HelloTVXlet implements Xlet, HActionListener {
     private HStaticText tekstLabel;
     private HTextButton buttons[] = new HTextButton[16];
     private HTextButton submitButton;
-   
+    private HStaticText score1Text;
+    private HStaticText score2Text;
     // Variabelen 
     private int cards[] = new int[16];
     private boolean firstTurn = true;
@@ -29,6 +30,10 @@ public class HelloTVXlet implements Xlet, HActionListener {
     private int firstCard;
     private int secondCard;
     private boolean chosenCards[] = new boolean[16];
+    
+    private int score1;
+    private int score2;
+    private boolean isPlayer1 = true;
     
     public void setupKnoppen() {
         // for lus om knoppen in te stellen
@@ -179,9 +184,22 @@ public class HelloTVXlet implements Xlet, HActionListener {
     public void checkCards() {
         if (cards[secondCard] == cards[firstCard]) {
             System.out.println("JUIST GERADEN!");
+            
+            if (isPlayer1 == true) {
+                score1++;
+                
+                   
+                System.out.println("Speler 1 :" + score1);
+            } else {
+                score2++;
+                score2Text.setTextContent("Speler 2 : ", score2);
+                System.out.println("Speler 2 :" + score2);
+            }
         }
         else {
             System.out.println("FOUT GERADEN!");
+            isPlayer1 = !isPlayer1;
+            System.out.println("Speler 1 is aan de beurt : " + isPlayer1);
             chosenCards[firstCard] = false;
             chosenCards[secondCard] = false;
             try {
@@ -230,6 +248,26 @@ public class HelloTVXlet implements Xlet, HActionListener {
         
         // tekstLabel aan de Scene toevoegen
         scene.add(tekstLabel);
+        
+        // score 1 tekst toevoegen
+        score1Text = new HStaticText("Speler 1 : " + score1);
+        // eigenschappen van tekstLabel instellen
+        score1Text.setLocation(500,150);
+        score1Text.setSize(150,40);
+        score1Text.setBackground(Color.GREEN);
+        score1Text.setBackgroundMode(HVisible.BACKGROUND_FILL);
+        
+        // score 2 tekst toevoegen
+        score2Text = new HStaticText("Speler 2 : " + score2);
+        // eigenschappen van tekstLabel instellen
+        score2Text.setLocation(500,200);
+        score2Text.setSize(150,40);
+        score2Text.setBackground(Color.RED);
+        score2Text.setBackgroundMode(HVisible.BACKGROUND_FILL);
+        
+        // voeg scores toe aan scene
+        scene.add(score1Text);
+        scene.add(score2Text);
         
         // Submit button toevegen
         submitButton = new HTextButton("SUBMIT GUESS");
