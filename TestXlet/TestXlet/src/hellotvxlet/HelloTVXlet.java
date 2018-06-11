@@ -197,12 +197,11 @@ public class HelloTVXlet implements Xlet, HActionListener {
             
             if (isPlayer1 == true) {
                 score1++;
-                
-                   
                 System.out.println("Speler 1 :" + score1);
+                score1Text.setTextContent("Speler 1 : " +score1, HState.NORMAL_STATE);
             } else {
                 score2++;
-                score2Text.setTextContent("Speler 2 : ", score2);
+                score2Text.setTextContent("Speler 2 : " +score2, HState.NORMAL_STATE);
                 System.out.println("Speler 2 :" + score2);
             }
         }
