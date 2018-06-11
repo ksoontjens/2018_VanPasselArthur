@@ -86,14 +86,17 @@ public class HelloTVXlet implements Xlet, HActionListener {
         System.out.println("Knoppen ingesteld");
     }
 
+    // Stel de nummers van de kaarten in (later vervangen door kleuren)
     public void setupCards() {
         // Maak een randomgenerator aan
         Random rand = new Random();
-        //System.out.println("test");
+        // Maak een lijst met alle mogelijke opties
         int cardsOpVolgorde[] = {1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8};
         boolean cardAssigned = false;
         int i = 0;
+        // for lus om kaarten op random plaats te zetten
         for(i=0;i<16;i++) {
+            // chosenCards is een variabele die later, tijdens het spel gebruikt wordt.
             chosenCards[i] = false;
             cardAssigned = false;
             do {
@@ -105,20 +108,24 @@ public class HelloTVXlet implements Xlet, HActionListener {
                     cardAssigned = true;
                 }
             } while (!cardAssigned);
+            // Print kaarten uit (kan je mee valsspelen)
             System.out.println("Kaart "+i+": "+cards[i]);
         }
     }
     
+    // Functie om te bepalen wat er gebeurt als een knop wordt ingedrukt
     public void actionPerformed (ActionEvent e){
         System.out.println("knop" + e.getActionCommand() + "_actioned");
-
+        
+        // Als 2 kaarten gekozen zijn -> controleer of ze hetzelfde zijn.
         if (check) {
             System.out.println("check de kaarten");
             checkCards();
-        }
-        else {
+        }   
+        else { 
+            // e.getActionCommand is een string van i -> zet terug om naar int
             int i = Integer.parseInt(e.getActionCommand());
-            if (chosenCards[i] == false) {
+            if (chosenCards[i] == false) {  // check of kaart al omgedraaid of al gepaard is
                 //System.out.println("knop" + e.getActionCommand() + " marcheert");
                 giveColor(i);
             }
@@ -128,59 +135,62 @@ public class HelloTVXlet implements Xlet, HActionListener {
         }
     }
     
+    // 'Draai een kaart om' -> geef een kleur aan de buttons
     public void giveColor(int i) {
         
         if (cards[i] == 1) {
             buttons[i].setBackground(Color.BLUE);
-            System.out.println("knop" + i + " is verandert van kleur");
+            System.out.println("knop" + i + " is veranderd van kleur");
         }
         
         if (cards[i] == 2) {
             buttons[i].setBackground(Color.RED);
-            System.out.println("knop" + i + " is verandert van kleur");
+            System.out.println("knop" + i + " is veranderd van kleur");
         }
         
         if (cards[i] == 3) {
             buttons[i].setBackground(Color.YELLOW);
-            System.out.println("knop" + i + " is verandert van kleur");
+            System.out.println("knop" + i + " is veranderd van kleur");
         }
         
         if (cards[i] == 4) {
             buttons[i].setBackground(Color.ORANGE);
-            System.out.println("knop" + i + " is verandert van kleur");
+            System.out.println("knop" + i + " is veranderd van kleur");
         }
         
         if (cards[i] == 5) {
             buttons[i].setBackground(Color.GREEN);
-            System.out.println("knop" + i + " is verandert van kleur");
+            System.out.println("knop" + i + " is veranderd van kleur");
         }
         
         if (cards[i] == 6) {
             buttons[i].setBackground(Color.WHITE);
-            System.out.println("knop" + i + " is verandert van kleur");
+            System.out.println("knop" + i + " is veranderd van kleur");
         }
         
         if (cards[i] == 7) {
             buttons[i].setBackground(Color.PINK);
-            System.out.println("knop" + i + " is verandert van kleur");
+            System.out.println("knop" + i + " is veranderd van kleur");
         }
         if (cards[i] == 8) {
             buttons[i].setBackground(Color.BLACK);
-            System.out.println("knop" + i + " is verandert van kleur");
+            System.out.println("knop" + i + " is veranderd van kleur");
         }
+        // Kaart is nu 'omgedraaid'
         chosenCards[i] = true;
         if (firstTurn) {
-            firstTurn = false;
+            firstTurn = false; 
             firstCard = i;
         }
         else {
             secondCard = i;
             firstTurn = true;
-            check = true;
-            submitButton.requestFocus();
+            check = true;   // 2 kaarten zijn nu gekozen -> we kunnen checken
+            submitButton.requestFocus();    // submit button voor beter overzicht
         }
     }
     
+    // Controleer of de kleuren overeen komen (eigl de nummers)
     public void checkCards() {
         if (cards[secondCard] == cards[firstCard]) {
             System.out.println("JUIST GERADEN!");
@@ -214,8 +224,7 @@ public class HelloTVXlet implements Xlet, HActionListener {
             buttons[secondCard].setBackgroundMode(HVisible.BACKGROUND_FILL);
             buttons[firstCard].setBackground(Color.GRAY);
             buttons[firstCard].setBackgroundMode(HVisible.BACKGROUND_FILL);
-            buttons[firstCard].requestFocus();
-            buttons[secondCard].requestFocus();
+            buttons[firstCard].requestFocus();  // nodig om de achtergrond ook echt te veranderen (geen idee waarom)
         }
         check = false;
         buttons[secondCard].requestFocus();
