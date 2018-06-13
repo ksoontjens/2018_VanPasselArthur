@@ -258,12 +258,15 @@ public class HelloTVXlet implements Xlet, HActionListener {
             buttons[i].setBackgroundMode(HVisible.BACKGROUND_FILL);
             buttons[i].requestFocus();
         }
-        buttons[1].requestFocus();
+        buttons[0].requestFocus();
         score1 = 0;
         score2 = 0;
         score1Text.setTextContent("Speler 1 : " +score1, HState.NORMAL_STATE);
         score2Text.setTextContent("Speler 2 : " +score2, HState.NORMAL_STATE);
         tekstLabel.setTextContent("--- MEMORY ---", HState.NORMAL_STATE);
+        isPlayer1 = true;
+        
+        selectPlayer();
     }
     
     public void endGame() {
