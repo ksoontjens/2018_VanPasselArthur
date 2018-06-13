@@ -54,7 +54,7 @@ public class HelloTVXlet implements Xlet, HActionListener {
         }
         
         // Submit + restart button toevegen
-        submitButton = new HTextButton("SUBMIT GUESS");
+        submitButton = new HTextButton("NEXT");
         submitButton.setLocation(460,330);
         submitButton.setSize(210,210);                        
         submitButton.setBackground(Color.GRAY);
@@ -87,8 +87,8 @@ public class HelloTVXlet implements Xlet, HActionListener {
         buttons[13].setFocusTraversal(buttons[12], buttons[14], buttons[9], restartButton);
         buttons[14].setFocusTraversal(buttons[13], buttons[15], buttons[10], null);
         buttons[15].setFocusTraversal(buttons[14], null, buttons[11], null);
-        submitButton.setFocusTraversal(restartButton, null, null, null); // op, neer, links, rechts
-        restartButton.setFocusTraversal(null, submitButton, buttons[13], null); // op, neer, links, rechts
+        submitButton.setFocusTraversal(null, null, null, null); // op, neer, links, rechts
+        restartButton.setFocusTraversal(null, null, buttons[13], null); // op, neer, links, rechts
         
         // knoppen aan de Scene toevoegen
         for (int i = 0;i<16;i++) {
