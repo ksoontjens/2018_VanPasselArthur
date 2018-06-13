@@ -24,6 +24,7 @@ public class HelloTVXlet implements Xlet, HActionListener {
     private HTextButton restartButton;
     private HStaticText score1Text;
     private HStaticText score2Text;
+    
     // Variabelen 
     private int cards[] = new int[16];
     private boolean firstTurn = true;
@@ -51,6 +52,23 @@ public class HelloTVXlet implements Xlet, HActionListener {
                 kolom++;
             }
         }
+        
+        // Submit + restart button toevegen
+        submitButton = new HTextButton("SUBMIT GUESS");
+        submitButton.setLocation(460,330);
+        submitButton.setSize(210,210);                        
+        submitButton.setBackground(Color.GRAY);
+        submitButton.setBackgroundMode(HVisible.BACKGROUND_FILL);
+        
+        restartButton = new HTextButton("Restart game ?");
+        restartButton.setLocation(460,260);
+        restartButton.setSize(210,60);                        
+        restartButton.setBackground(Color.GRAY);
+        restartButton.setBackgroundMode(HVisible.BACKGROUND_FILL);  
+        
+        
+        
+        
 
         // pijltjes beweging toevoegen
         buttons[0].setFocusTraversal(null, buttons[1], null, buttons[4]); // op, neer, links, rechts
@@ -69,11 +87,15 @@ public class HelloTVXlet implements Xlet, HActionListener {
         buttons[13].setFocusTraversal(buttons[12], buttons[14], buttons[9], restartButton);
         buttons[14].setFocusTraversal(buttons[13], buttons[15], buttons[10], null);
         buttons[15].setFocusTraversal(buttons[14], null, buttons[11], null);
+        submitButton.setFocusTraversal(restartButton, null, null, null); // op, neer, links, rechts
+        restartButton.setFocusTraversal(null, submitButton, buttons[13], null); // op, neer, links, rechts
         
         // knoppen aan de Scene toevoegen
         for (int i = 0;i<16;i++) {
             scene.add(buttons[i]);
         }
+        scene.add(submitButton);        
+        scene.add(restartButton);
         
         // Startpunt selectie
         buttons[0].requestFocus();
@@ -83,6 +105,11 @@ public class HelloTVXlet implements Xlet, HActionListener {
                 buttons[i].setActionCommand(""+i);
                 buttons[i].addHActionListener(this);
         }
+        
+        submitButton.setActionCommand("-voor-submitten");
+        restartButton.setActionCommand("-restart-");
+        submitButton.addHActionListener(this);
+        restartButton.addHActionListener(this);
         
         System.out.println("Knoppen ingesteld");
     }
@@ -201,25 +228,17 @@ public class HelloTVXlet implements Xlet, HActionListener {
             
             if (isPlayer1 == true) {
                 score1++;
-                System.out.println("Speler 1 :" + score1);
-                score1Text.setTextContent("Speler 1 : " +score1, HState.NORMAL_STATE);
-                if (score1 + score2 == 8) {
-                    endGame();
-                }
+                System.out.println("Speler 1: " + score1);
+                score1Text.setTextContent("Speler 1: " +score1, HState.NORMAL_STATE);
             } else {
                 score2++;
-                score2Text.setTextContent("Speler 2 : " +score2, HState.NORMAL_STATE);
-                System.out.println("Speler 2 :" + score2);
-                if (score1 + score2 == 8) {
-                    endGame();
-                }
+                score2Text.setTextContent("Speler 2: " +score2, HState.NORMAL_STATE);
+                System.out.println("Speler 2: " + score2);
             }
         }
         else {
             System.out.println("FOUT GERADEN!");
-            isPlayer1 = !isPlayer1;
-            selectPlayer();
-            System.out.println("Speler 1 is aan de beurt : " + isPlayer1);
+            
             chosenCards[firstCard] = false;
             chosenCards[secondCard] = false;
             try {
@@ -235,21 +254,44 @@ public class HelloTVXlet implements Xlet, HActionListener {
             buttons[firstCard].setBackground(Color.GRAY);
             buttons[firstCard].setBackgroundMode(HVisible.BACKGROUND_FILL);
             buttons[firstCard].requestFocus();  // nodig om de achtergrond ook echt te veranderen (geen idee waarom)
+            
+            isPlayer1 = !isPlayer1;
+            selectPlayer();
+            if (isPlayer1) {
+                System.out.println("Speler 1 is aan de beurt");
+            }
+            else {
+                System.out.println("Speler 2 is aan de beurt");
+            }
+            //System.out.println("Speler 1 is aan de beurt : " + isPlayer1);
         }
-        check = false;
-        buttons[secondCard].requestFocus();
         
+        if (score1 + score2 == 8) {
+            endGame();
+        }
+        else {
+            check = false;
+            buttons[secondCard].requestFocus();
+        }
     }
     
     public void selectPlayer() {
-        if (isPlayer1 == true) {
-            score1Text.setBackgroundMode(HVisible.BACKGROUND_FILL);
-            score2Text.setBackgroundMode(HVisible.NO_BACKGROUND_FILL);
-        } else if (isPlayer1 == false) {
-            
-            score2Text.setBackgroundMode(HVisible.BACKGROUND_FILL);
-            score1Text.setBackgroundMode(HVisible.NO_BACKGROUND_FILL);
-    }
+        System.out.println(isPlayer1);
+        if (isPlayer1) {
+            score1Text.setBackground(Color.green);
+            score2Text.setBackground(Color.black);
+            // klein beetje van plaats veranderen zodat ze ook 'echt' veranderen 
+            score1Text.setLocation(501,150);
+            score2Text.setLocation(501,200);
+        } 
+        else {
+            score1Text.setBackground(Color.black);
+            score2Text.setBackground(Color.green);
+            // klein beetje van plaats veranderen zodat ze ook 'echt' veranderen 
+            score1Text.setLocation(500,150);
+            score2Text.setLocation(500,200);
+        }
+        System.out.println(isPlayer1);
     }
     public void restartGame() {
         
@@ -257,7 +299,10 @@ public class HelloTVXlet implements Xlet, HActionListener {
             buttons[i].setBackground(Color.GRAY);
             buttons[i].setBackgroundMode(HVisible.BACKGROUND_FILL);
             buttons[i].requestFocus();
+            chosenCards[i] = false;
         }
+        setupCards();
+        
         buttons[0].requestFocus();
         score1 = 0;
         score2 = 0;
@@ -277,6 +322,7 @@ public class HelloTVXlet implements Xlet, HActionListener {
         } else {
             tekstLabel.setTextContent("Gelijkspel", HState.NORMAL_STATE);
         }
+        restartButton.requestFocus();
         
     }
     // Initialiseren van de benodigde resources en variabelen :
@@ -313,41 +359,20 @@ public class HelloTVXlet implements Xlet, HActionListener {
         score1Text.setLocation(500,150);
         score1Text.setSize(150,40);
         score1Text.setBackground(Color.green);
+        score1Text.setBackgroundMode(HVisible.BACKGROUND_FILL);
         
         // score 2 tekst toevoegen
         score2Text = new HStaticText("Speler 2 : " + score2);
         // eigenschappen van tekstLabel instellen
         score2Text.setLocation(500,200);
         score2Text.setSize(150,40);
-        score2Text.setBackground(Color.green);
+        score2Text.setBackground(Color.black);
+        score2Text.setBackgroundMode(HVisible.BACKGROUND_FILL);
         
         // voeg scores toe aan scene
         scene.add(score1Text);
         scene.add(score2Text);
-        
-        // Submit button toevegen
-        submitButton = new HTextButton("SUBMIT GUESS");
-        submitButton.setLocation(460,330);
-        submitButton.setSize(210,210);                        
-        submitButton.setBackground(Color.GRAY);
-        submitButton.setBackgroundMode(HVisible.BACKGROUND_FILL);  
-     //   submitButton.setFocusTraversal(restartButton, null, null, null); // op, neer, links, rechts
-        submitButton.setActionCommand("-voor-submitten");
-        submitButton.addHActionListener(this);
-        
-        scene.add(submitButton);
-        
-        // Restart button toevegen
-        restartButton = new HTextButton("Restart game ?");
-        restartButton.setLocation(460,260);
-        restartButton.setSize(210,60);                        
-        restartButton.setBackground(Color.GRAY);
-        restartButton.setBackgroundMode(HVisible.BACKGROUND_FILL);  
-        restartButton.setFocusTraversal(null, null, buttons[13], null); // op, neer, links, rechts
-        restartButton.setActionCommand("-restart-");
-        restartButton.addHActionListener(this);
-        
-        scene.add(restartButton);
+                       
         // Knoppen installen
         setupKnoppen();
         setupCards();
@@ -361,8 +386,6 @@ public class HelloTVXlet implements Xlet, HActionListener {
         // Scene zichtbaar maken
         scene.validate();
         scene.setVisible(true);
-        
-        
     }
     
     // Methode voor de pause toestand .
