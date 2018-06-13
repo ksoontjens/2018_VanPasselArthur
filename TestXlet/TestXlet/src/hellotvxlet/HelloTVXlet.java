@@ -265,12 +265,11 @@ public class HelloTVXlet implements Xlet, HActionListener {
             }
             //System.out.println("Speler 1 is aan de beurt : " + isPlayer1);
         }
-        
+        check = false;
         if (score1 + score2 == 8) {
             endGame();
         }
         else {
-            check = false;
             buttons[secondCard].requestFocus();
         }
     }
